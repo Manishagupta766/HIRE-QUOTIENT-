@@ -57,11 +57,12 @@ function App() {
     <div>
       <h1 style={{textAlign:"center"}}>Holdings Viewers</h1>
       {Object.entries(groupedHoldings).map(([assetClass, holdings]) => (
-        <Accordion key={assetClass} expanded={expanded[assetClass]} onChange={() => handleExpand(assetClass)}>
+        <Accordion key={assetClass}>
           <AccordionSummary
             expandIcon={<KeyboardArrowDownIcon />}
             collapseIcon={<KeyboardArrowUpIcon />}
           >
+            
             <Typography variant="h5">{assetClass}</Typography>
           </AccordionSummary>
           <AccordionDetails>
