@@ -36,13 +36,13 @@ function App() {
     fetchHoldings();
   }, []);
 
-
-  const handleExpand = (assetClass) => {
+  const toggleAccordion = (assetClass) => {
     setExpanded((prevExpanded) => ({
       ...prevExpanded,
       [assetClass]: !prevExpanded[assetClass],
     }));
   };
+
 
   const groupedHoldings = holdings.reduce((acc, holding) => {
     const { asset_class } = holding;
@@ -55,15 +55,27 @@ function App() {
 
   return (
     <div>
-      <h1 style={{textAlign:"center"}}>Holdings Viewers</h1>
+      <h1 style={{textAlign:"center"}} className="h-5 text-lg">Holdings Viewers</h1>
       {Object.entries(groupedHoldings).map(([assetClass, holdings]) => (
-        <Accordion key={assetClass}>
-          <AccordionSummary
-            expandIcon={<KeyboardArrowDownIcon />}
-            collapseIcon={<KeyboardArrowUpIcon />}
-          >
+        <Accordion 
+        key={assetClass} 
+        expanded={expanded[assetClass]}
+        onChange={() => toggleAccordion(assetClass)}
+      >
+         <AccordionSummary
+      expandIcon={<KeyboardArrowDownIcon />}
+      collapseIcon={<KeyboardArrowUpIcon />}
+    >
+      
+      {expanded[assetClass] ? (
+        <KeyboardArrowUpIcon />
+      ) : (
+        <KeyboardArrowDownIcon />
+      )}
             
-            <Typography variant="h5">{assetClass}</Typography>
+            <Typography variant="h5" className="text-mg">{assetClass} ({holdings.length})</Typography>
+           
+
           </AccordionSummary>
           <AccordionDetails>
             <TableContainer component={Paper}>
@@ -83,10 +95,10 @@ function App() {
                     <TableRow key={index}>
                       <TableCell>{holding.name}</TableCell>
                       <TableCell>{holding.ticker}</TableCell>
-                      <TableCell>{holding.avg_price}</TableCell>
-                      <TableCell>{holding.market_price}</TableCell>
-                      <TableCell>{holding.latest_chg_pct}</TableCell>
-                      <TableCell>{holding.market_value_ccy}</TableCell>
+                      <TableCell className={holding.avg_price < 0 ? "negative-value" : ""}>{holding.avg_price}</TableCell>
+                      <TableCell className={holding.market_price < 0 ? "negative-value" : ""}>{holding.market_price}</TableCell>
+                      <TableCell className={holding.latest_chg_pct < 0 ? "negative-value" : ""}>{holding.latest_chg_pct}</TableCell>
+                      <TableCell className={holding.market_value_ccy < 0 ? "negative-value" : ""}>{holding.market_value_ccy}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
